@@ -1,0 +1,28 @@
+<eventStream>
+	<source>someSystem</source>
+	<event>
+		<startMs>1000000</startMs>
+		<endMs>1000100</endMs>
+		<record_date>1-MAY-2017</record_date>
+		<user_name>F080976</user_name>
+		<stress>N</stress>
+		<snapshot>10Q EOD</snapshot>
+	</event>
+	<event>
+		<startMs>1000200</startMs>
+		<endMs>1000300</endMs>
+		<record_date>2-MAY-2017</record_date>
+		<user_name>SUPERUSER</user_name>
+		<stress>Y</stress>
+		<snapshot>STRESS_FINAL</snapshot>
+	</event>
+	<event>
+		<startMs>1000200</startMs>
+		<endMs>1000300</endMs>
+		<record_date>2-MAY-2017</record_date>
+		<user_name>SUPERUSER</user_name>
+		<stress>Y</stress>
+		<of_Special_interest>Y</of_Special_interest>
+		<snapshot>STRESS_FINAL</snapshot>
+	</event>
+</eventStream>
