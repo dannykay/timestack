@@ -25,6 +25,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  */
 public class EventXmlParser {
+//	private static logger = org.slf4j.LoggerFactory.getLogger(HelloWorld.class);
 	private static class AttributeHandler extends DefaultHandler {
 		private String currAttribute;
 		private String currValue;
