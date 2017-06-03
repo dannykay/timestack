@@ -7,6 +7,8 @@ import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -25,7 +27,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  */
 public class EventXmlParser {
-//	private static logger = org.slf4j.LoggerFactory.getLogger(HelloWorld.class);
+	private static Logger logger = LoggerFactory.getLogger(EventXmlParser.class);
 	private static class AttributeHandler extends DefaultHandler {
 		private String currAttribute;
 		private String currValue;
@@ -45,22 +47,20 @@ public class EventXmlParser {
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes)
 				throws SAXException {
-			if ("event".equals(qName)) {
-				if (attributeCodes.size()>0) {
-					throw new SAXException("There are unsaved attributes: "+currAttribute+"="+currValue);
-				}
-			} else {
+			logger.info("uri="+uri+" localName="+localName+" qName="+qName);
+			
 				currAttribute = qName;
-			}
 		}
 
 		@Override
 		public void characters(char ch[], int start, int length) throws SAXException {
 			currValue=new String(ch, start, length);
+			logger.info("chars="+currValue);
 		}
 
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
+			logger.info(qName);
 			if ("startMs".equals(qName)) {
 				startMs=Long.parseLong(currValue);
 			} else if ("endMs".equals(qName)) {
@@ -68,7 +68,9 @@ public class EventXmlParser {
 			} else if ("event".equals(qName)) {
 				int[] codes=new int[attributeCodes.size()];
 				for (int i=0;i<attributeCodes.size();codes[i]=attributeCodes.get(i++));
-				eventList.add(new Event(startMs,endMs,codes));
+				Event ev;
+				eventList.add(ev=new Event(startMs,endMs,codes));
+				logger.info("Added event: "+ev);
 				attributeCodes=new ArrayList<>();
 			} else {
 				attributeCodes.add(eventAttributeSet.add(currAttribute, currValue));

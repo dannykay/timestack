@@ -38,5 +38,9 @@ public class Event {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "Event [tStart=" + tStart + ", tEnd=" + tEnd + ", attributes=" + Arrays.toString(attributes) + "]";
+	}
 	
 }
