@@ -53,11 +53,17 @@ public class EventAttribute {
 		}
 		return (attrCode<<16 |(0x0000FFFF & encode.get(attribValue)));
 	}
-	public String decode(int code) {
-		if (code>>16 !=attrCode) {
-			throw new RuntimeException("code is not for this EventAttribute");
+	@SuppressWarnings("serial")
+	public static class UnknownAttributeCodeRuntimeException extends RuntimeException {
+		UnknownAttributeCodeRuntimeException(int code,int shouldbe) {
+			super("Attribute code "+code+" does not match "+shouldbe);
 		}
-		return decode.get(0x0000FF&code);
+	}
+	public String decode(int code) {
+		if (code>>>16 !=attrCode) {
+			throw new UnknownAttributeCodeRuntimeException(code>>>16,attrCode);
+		}
+		return decode.get(0x0000FFFF&code);
 	}
 	public int size()
 	{
@@ -74,5 +80,8 @@ public class EventAttribute {
 	}
 	public int getAttrCode() {
 		return attrCode;
+	}
+	public static short attrCode(int encodedValue) {
+		return(short)(encodedValue>>>16);
 	}
 }
