@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.dkay229.attribset.AttributeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -34,11 +35,11 @@ public class EventXmlParser {
 		private long startMs=0L;
 		private long endMs=0L;
 		List<Integer>attributeCodes=new ArrayList<>();
-		private final EventAttributeSet eventAttributeSet;
+		private final AttributeSet eventAttributeSet;
 		private final List<Event> eventList;
 		
 
-		public AttributeHandler(EventAttributeSet eventAttributeSet, List<Event> eventList) {
+		public AttributeHandler(AttributeSet eventAttributeSet, List<Event> eventList) {
 			super();
 			this.eventAttributeSet = eventAttributeSet;
 			this.eventList = eventList;
@@ -47,7 +48,7 @@ public class EventXmlParser {
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes)
 				throws SAXException {
-			logger.info("uri="+uri+" localName="+localName+" qName="+qName);
+			logger.debug("uri="+uri+" localName="+localName+" qName="+qName);
 			
 				currAttribute = qName;
 		}
@@ -55,12 +56,11 @@ public class EventXmlParser {
 		@Override
 		public void characters(char ch[], int start, int length) throws SAXException {
 			currValue=new String(ch, start, length);
-			logger.info("chars="+currValue);
 		}
 
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
-			logger.info(qName);
+			logger.debug(qName);
 			if ("startMs".equals(qName)) {
 				startMs=Long.parseLong(currValue);
 			} else if ("endMs".equals(qName)) {
@@ -70,7 +70,7 @@ public class EventXmlParser {
 				for (int i=0;i<attributeCodes.size();codes[i]=attributeCodes.get(i++));
 				Event ev;
 				eventList.add(ev=new Event(startMs,endMs,codes));
-				logger.info("Added event: "+ev);
+				logger.info("Added event: "+ev.toString(eventAttributeSet));
 				attributeCodes=new ArrayList<>();
 			} else {
 				attributeCodes.add(eventAttributeSet.add(currAttribute, currValue));
@@ -78,7 +78,7 @@ public class EventXmlParser {
 		}
 	}
 
-	public static List<Event> parseEventMessage(InputStream inputStream,EventAttributeSet eventAttributeSet) throws Exception {
+	public static List<Event> parseEventMessage(InputStream inputStream,AttributeSet eventAttributeSet) throws Exception {
 		List<Event> r = new ArrayList<>();
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();

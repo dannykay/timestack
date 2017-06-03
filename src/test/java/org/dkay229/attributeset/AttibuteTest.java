@@ -1,18 +1,19 @@
-package org.dkay229.tmestack.graphics.event;
+package org.dkay229.attributeset;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Comparator;
 import java.util.List;
 
-import org.dkay229.timestack.graphics.event.EventAttribute;
+import org.dkay229.attribset.Attribute;
+import org.dkay229.attribset.Attribute.UnknownAttributeCodeRuntimeException;
 import org.junit.Test;
 
-public class EventAttibuteTest {
+public class AttibuteTest {
 
 	@Test
 	public void testString() {
-		EventAttribute nameAttr = new EventAttribute("Name","Full name of user",1,null);
+		Attribute nameAttr = new Attribute("Name","Full name of user",1,null);
 		int john=nameAttr.encode("John");
 		int amit=nameAttr.encode("Amit");
 		int zulu=nameAttr.encode("Zulu");
@@ -39,7 +40,22 @@ public class EventAttibuteTest {
 
 		assertEquals("Size is 3",3,nameAttr.size());
 		assertEquals("code is 1",1,nameAttr.getAttrCode());
-
+		
+		
+	}
+	
+	@Test
+	public void badAttrCodeExceptionTest() {
+		
+		Throwable th=null;
+		String str=null;
+		Attribute nameAttr = new Attribute("Name","Full name of user",1,null);
+		try {
+			nameAttr.decode(0xAAAAAAA);
+		} catch (Throwable e) {
+			th=e;
+		}
+		assertTrue("Bad encoded value throws excepton",th instanceof UnknownAttributeCodeRuntimeException );
 	}
 	
 	@Test
@@ -72,17 +88,38 @@ public class EventAttibuteTest {
 				return i1-i2;
 			}
 		};
-		EventAttribute dateAttr = new EventAttribute("Date","DD-MON-YYYY date strings",2,dateSort);
+		
+		Attribute dateAttr = new Attribute("Date","DD-MON-YYYY date strings",2,dateSort);
 		dateAttr.encode("2-feb-2017");
 		dateAttr.encode("1-sep-2016");
 		dateAttr.encode("29-JAN-2017");
-		dateAttr.encode("7-aug-2017");
+		dateAttr.encode("7-aug-2015");
 		
 		List<String> sorted=dateAttr.values(true);
-		assertEquals("Date sort","1-sep-2016",sorted.get(0));
-		assertEquals("Date sort","29-JAN-2017",sorted.get(1));
-		assertEquals("Date sort","2-feb-2017",sorted.get(2));
-		assertEquals("Date sort","7-aug-2017",sorted.get(3));
+		
+		
+		assertEquals("Date sorted by sort in ctor","1-sep-2016",sorted.get(1));
+		assertEquals("Date sorted by sort in ctor","29-JAN-2017",sorted.get(2));
+		assertEquals("Date sorted by sort in ctor","2-feb-2017",sorted.get(3));
+		assertEquals("Date sorted by sort in ctor","7-aug-2015",sorted.get(0));
+
+		Attribute dateAttr1 = new Attribute("Date","DD-MON-YYYY date strings",2,null);
+		dateAttr1.encode("2-feb-2017");
+		dateAttr1.encode("1-sep-2016");
+		dateAttr1.encode("29-JAN-2017");
+		dateAttr1.encode("7-aug-2015");
+		List<String> sorted1=dateAttr1.values(true);
+		assertEquals("Default string ordering","1-sep-2016",sorted1.get(0));
+		assertEquals("Default string ordering","2-feb-2017",sorted1.get(1));
+		assertEquals("Default string ordering","29-JAN-2017",sorted1.get(2));
+		assertEquals("Default string ordering","7-aug-2015",sorted1.get(3));
+	
+		dateAttr1.setSortFunc(dateSort);
+		List<String> sorted2=dateAttr1.values(true);
+		assertEquals("Date sorted after settingsort func","1-sep-2016",sorted.get(1));
+		assertEquals("Date sorted after settingsort func","29-JAN-2017",sorted.get(2));
+		assertEquals("Date sorted after settingsort func","2-feb-2017",sorted.get(3));
+		assertEquals("Date sorted after settingsort func","7-aug-2015",sorted.get(0));
 	}
 
 }

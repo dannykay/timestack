@@ -2,6 +2,8 @@ package org.dkay229.timestack.graphics.event;
 
 import java.util.Arrays;
 
+import org.dkay229.attribset.AttributeSet;
+
 public class Event {
 	long tStart;
 	long tEnd;
@@ -38,9 +40,26 @@ public class Event {
 			return false;
 		return true;
 	}
+	public String toString(AttributeSet attSet)
+	{
+		String attStr=null;
+		if (attSet != null) {
+			StringBuilder sb=new StringBuilder();
+			for (int i:attributes) {
+				sb.append(attSet.getAttributeName(i));
+				sb.append("=");
+				sb.append(attSet.getAttributeValue(i));
+				sb.append(",");
+			}
+			attStr=sb.toString().replaceFirst(",$", "]");
+		} else {
+			attStr=Arrays.toString(attributes);
+		}
+		return "Event [tStart=" + tStart + ", tEnd=" + tEnd + ", attributes=" + attStr + "]";
+	}
 	@Override
 	public String toString() {
-		return "Event [tStart=" + tStart + ", tEnd=" + tEnd + ", attributes=" + Arrays.toString(attributes) + "]";
+		return toString(null);
 	}
 	
 }

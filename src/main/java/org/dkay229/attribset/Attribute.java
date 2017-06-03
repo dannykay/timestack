@@ -1,4 +1,4 @@
-package org.dkay229.timestack.graphics.event;
+package org.dkay229.attribset;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,15 +12,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Danny
  *
  */
-public class EventAttribute {
+public class Attribute {
 	private final short attrCode;
 	private final String attrName;
 	private final String attrLongDescr;
-	private final Comparator<String> sortFunc;
+	private Comparator<String> sortFunc;
 	private final AtomicInteger codeSequence=new AtomicInteger();
 	private final ConcurrentHashMap<String,Integer> encode=new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Integer,String> decode=new ConcurrentHashMap<>();
-	public  EventAttribute(String attrName, String attrLongDescr,int attrCode,Comparator<String> sortFunc) {
+	public  Attribute(String attrName, String attrLongDescr,int attrCode,Comparator<String> sortFunc) {
 		super();
 		this.attrName = attrName;
 		this.attrLongDescr = attrLongDescr;
@@ -35,6 +35,11 @@ public class EventAttribute {
 		}
 		this.sortFunc=sortFunc;
 	}
+	
+	public void setSortFunc(Comparator<String> sortFunc) {
+		this.sortFunc = sortFunc;
+	}
+
 	public String getAttrName() {
 		return attrName;
 	}
