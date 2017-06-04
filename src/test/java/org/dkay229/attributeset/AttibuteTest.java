@@ -1,6 +1,7 @@
 package org.dkay229.attributeset;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
 import java.util.List;
@@ -103,7 +104,7 @@ public class AttibuteTest {
 		assertEquals("Date sorted by sort in ctor","2-feb-2017",sorted.get(3));
 		assertEquals("Date sorted by sort in ctor","7-aug-2015",sorted.get(0));
 
-		Attribute dateAttr1 = new Attribute("Date","DD-MON-YYYY date strings",2,null);
+		Attribute dateAttr1 = new Attribute("Date","DD-MON-YYYY date strings",4,null);
 		dateAttr1.encode("2-feb-2017");
 		dateAttr1.encode("1-sep-2016");
 		dateAttr1.encode("29-JAN-2017");
@@ -120,6 +121,52 @@ public class AttibuteTest {
 		assertEquals("Date sorted after settingsort func","29-JAN-2017",sorted.get(2));
 		assertEquals("Date sorted after settingsort func","2-feb-2017",sorted.get(3));
 		assertEquals("Date sorted after settingsort func","7-aug-2015",sorted.get(0));
+	}
+
+	Comparator<String> intCompare = new Comparator<String>() {
+		
+		@Override
+		public int compare(String s1,String s2) {
+			int i1 = Integer.parseInt(s1);
+			int i2 = Integer.parseInt(s2);
+			return i1-i2;
+		}
+	};
+	
+	@Test
+	public void filterTest() {
+		Attribute intAttr = new Attribute("Number","Number",9,intCompare);
+		intAttr.encode("999");
+		intAttr.encode("10");
+		intAttr.encode("50");
+		intAttr.encode("9");
+		intAttr.encode("100");
+		intAttr.encode("1000");
+		
+		int [] lt100 = intAttr.lessThan("100");
+		for (int code:lt100) {
+			int iVal=Integer.parseInt(intAttr.decode(code));
+			assertTrue(""+iVal+ " less than 100",iVal<100);
+		}
+		assertEquals("3 less than 100",3,lt100.length);
+		int [] le100 = intAttr.lessThanOrEqual("100");
+		for (int code:le100) {
+			int iVal=Integer.parseInt(intAttr.decode(code));
+			assertTrue(""+iVal+ " less than 100",iVal<=100);
+		}
+		assertEquals("4 less than  or equal 100",4,le100.length);
+		int [] gt100 = intAttr.greaterThan("100");
+		for (int code:gt100) {
+			int iVal=Integer.parseInt(intAttr.decode(code));
+			assertTrue(""+iVal+ " less than 100",iVal>100);
+		}
+		assertEquals("2 greater than 100",2,gt100.length);
+		int [] ge100 = intAttr.greaterThanOrEqual("100");
+		for (int code:ge100) {
+			int iVal=Integer.parseInt(intAttr.decode(code));
+			assertTrue(""+iVal+ " less than 100",iVal>=100);
+		}
+		assertEquals("3 greater than or equal 100",3,ge100.length);
 	}
 
 }

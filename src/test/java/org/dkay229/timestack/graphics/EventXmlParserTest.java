@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.io.InputStream;
 import java.util.List;
 
-import org.dkay229.attribset.AttributeSet;
+import org.dkay229.attribset.AttributeStore;
 import org.dkay229.timestack.graphics.event.Event;
 import org.dkay229.timestack.graphics.event.EventXmlParser;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class EventXmlParserTest {
 	@Test
 	public void testEventXmlParser() {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("test-event-messages.xml");
-		AttributeSet eventAttributeSet = new AttributeSet();
+		AttributeStore eventAttributeSet = new AttributeStore();
 		Exception e=null;
 		List<Event> events=null;
 		try {

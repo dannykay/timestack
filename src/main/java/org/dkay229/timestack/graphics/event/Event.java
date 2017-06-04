@@ -2,7 +2,7 @@ package org.dkay229.timestack.graphics.event;
 
 import java.util.Arrays;
 
-import org.dkay229.attribset.AttributeSet;
+import org.dkay229.attribset.AttributeStore;
 
 public class Event {
 	long tStart;
@@ -40,7 +40,7 @@ public class Event {
 			return false;
 		return true;
 	}
-	public String toString(AttributeSet attSet)
+	public String toString(AttributeStore attSet)
 	{
 		String attStr=null;
 		if (attSet != null) {

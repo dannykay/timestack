@@ -2,15 +2,15 @@ package org.dkay229.attributeset;
 
 import static org.junit.Assert.*;
 
-import org.dkay229.attribset.AttributeSet;
+import org.dkay229.attribset.AttributeStore;
 import org.junit.Test;
 
-public class AttributeSetTest {
+public class AttributeStoreTest {
 
 
 	@Test
 	public void testAddAndDecode() {
-		AttributeSet eas = new AttributeSet();
+		AttributeStore eas = new AttributeStore();
 		String [][] attributesAndValues = 
 			{	{ "firstName","John"},  { "lastName","King"},{"age","12"}	
 			,	{ "firstName","Martha"},{ "lastName","King"},{"age","32"}	

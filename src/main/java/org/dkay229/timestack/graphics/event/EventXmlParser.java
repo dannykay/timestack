@@ -7,7 +7,7 @@ import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.dkay229.attribset.AttributeSet;
+import org.dkay229.attribset.AttributeStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -35,11 +35,11 @@ public class EventXmlParser {
 		private long startMs=0L;
 		private long endMs=0L;
 		List<Integer>attributeCodes=new ArrayList<>();
-		private final AttributeSet eventAttributeSet;
+		private final AttributeStore eventAttributeSet;
 		private final List<Event> eventList;
 		
 
-		public AttributeHandler(AttributeSet eventAttributeSet, List<Event> eventList) {
+		public AttributeHandler(AttributeStore eventAttributeSet, List<Event> eventList) {
 			super();
 			this.eventAttributeSet = eventAttributeSet;
 			this.eventList = eventList;
@@ -78,7 +78,7 @@ public class EventXmlParser {
 		}
 	}
 
-	public static List<Event> parseEventMessage(InputStream inputStream,AttributeSet eventAttributeSet) throws Exception {
+	public static List<Event> parseEventMessage(InputStream inputStream,AttributeStore eventAttributeSet) throws Exception {
 		List<Event> r = new ArrayList<>();
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();

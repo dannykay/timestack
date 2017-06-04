@@ -8,23 +8,32 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Contains attributes and attribute values and provides related meta data and statistical information.
  * 
  */
-public class AttributeSet {
-	private AtomicInteger seq = new AtomicInteger();
-	private ConcurrentHashMap<String, Attribute> attributes = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<Integer, Attribute> attributeLookup = new ConcurrentHashMap<>();
+public class AttributeStore {
+	private final AtomicInteger seq = new AtomicInteger();
+	private final ConcurrentHashMap<String, Attribute> attributes = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Integer, Attribute> attributeLookup = new ConcurrentHashMap<>();
+	private final int attributeValueBitCount;
 	
+	
+	public AttributeStore() {
+		this(16);
+	}
+	public AttributeStore(int attributeValueBitCount) {
+		super();
+		this.attributeValueBitCount = attributeValueBitCount;
+	}
 	public int add(String attrName, String attrValue) {
 		synchronized (attributes) {
 			if (!attributes.containsKey(attrName)) {
-				Attribute eventAttribute=new Attribute(attrName, attrName, seq.incrementAndGet(), null);
+				Attribute eventAttribute=new Attribute(attrName, attrName, seq.incrementAndGet(), null,attributeValueBitCount);
 				attributes.put(attrName, eventAttribute);
 				attributeLookup.put(eventAttribute.getAttrCode(), eventAttribute);
 			}
 		}
 		return attributes.get(attrName).encode(attrValue);
 	}
-	public static int getAttributeCode(int code) {
-		return Attribute.attrCode(code);
+	public int getAttributeCode(int code) {
+		return code>>>(32-attributeValueBitCount);
 	}
 	public String getAttributeName(int code) {
 		return attributeLookup.get(getAttributeCode(code)).getAttrName();

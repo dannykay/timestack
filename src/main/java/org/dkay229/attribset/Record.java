@@ -8,7 +8,8 @@ public class Record {
 		super();
 		this.attributes = attributes;
 	}
-	public String toString(AttributeSet attSet)
+	
+	public String toString(AttributeStore attSet)
 	{
 		String attStr=null;
 		if (attSet != null) {

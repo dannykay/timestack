@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.dkay229.attribset.AttributeSet;
+import org.dkay229.attribset.AttributeStore;
 import org.dkay229.attribset.Record;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class RecordTest {
 
 	@Test
 	public void testToStringAttributeSet() {
-		AttributeSet as = new AttributeSet();
+		AttributeStore as = new AttributeStore();
 		int[] att=new int[1];
 		att[0]=as.add("Name", "john");
 		assertEquals("hash match","Record [Name=john]",new Record(att).toString(as));
